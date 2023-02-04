@@ -1,0 +1,9 @@
+.vscode
+venv
+/buscador/ml/__pycache__
+/buscador/ml/output
+/buscador/ml/spiders/__pycache__
+/buscador/ml/spiders/.env
+/buscador/ml/*.txt
+/buscador/ml/*.json
+/buscador/ml/*.csv
