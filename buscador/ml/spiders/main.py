@@ -70,7 +70,6 @@ class search_ml(scrapy.Spider):
             if i.xpath('.//h2[@class="ui-search-item__title ui-search-item__group__element shops__items-group-details shops__item-title"]/text()'):
                 l.add_xpath(
                     'link', './/div[@class="andes-card andes-card--flat andes-card--default ui-search-result shops__cardStyles ui-search-result--core andes-card--padding-default andes-card--animated"]/a/@href')
-            l.add_value('unit', self.unit)
 
             yield l.load_item()
 
