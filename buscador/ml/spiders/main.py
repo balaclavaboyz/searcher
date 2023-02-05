@@ -137,7 +137,8 @@ class start(scrapy.Spider):
                     s['CONCURRRENT_REQUESTS']=1
                     s['LOG_ENABLED']=True
                     s['HTTPCACHE_ENABLED']=True
-                    s['CONCURRENT_ITEMS']=5
+                    s['CONCURRENT_ITEMS']=1
+                    s['TELNETCONSOLE_ENABLED']=False
 
                     process = CrawlerProcess(s)
                     process.crawl(search_ml, context=item['title'])
