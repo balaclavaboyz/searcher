@@ -96,7 +96,7 @@ class HayamaxSpider(scrapy.Spider):
                 yield scrapy.Request(
                     meta={
                         'dont_redirect': True,
-                        'handle_httpstatus_list': [302]
+                        'handle_httpstatus_list': [302],
                     }, url=t, callback=self.parsedata)
 
     def parsedata(self, res):
@@ -125,12 +125,14 @@ class start(scrapy.Spider):
     name = 'start'
 
     def __init__(self):
+        # search_ml()
         self.hayamax_search_in_ml()
         # self.filter_hayamax_products()
 
     def hayamax_search_in_ml(self):
         if os.path.exists('./output'):
             shutil.rmtree('./output')
+
         with open('hayamax.json', 'r', encoding="utf-8") as f:
             with open('titles_hayamax.txt','w',encoding='utf-8') as t:
                 data = json.load(f)
