@@ -25,34 +25,31 @@ class search_ml(scrapy.Spider):
 
     name = 'search_ml'
 
-    def __init__(self, context=None, unit=None):
-        self.context = context
-        self.unit = unit
+    # def __init__(self, context=None, unit=None):
+    #     self.context = context
+    #     self.unit = unit
+    def __init__(self):
+        self.urls=[]
+        with open('hayamax.json','r',encoding='utf-8') as qwe:
+            tempdata=json.load(qwe)
+            for i in tempdata:
+                title_without_slash = re.sub('/', ' ', i['title'])
+                # # escape ""
+                # title_without_slash = re.sub('"', '', title_without_slash)
+                # t.write(title_without_slash+'\n')
+
+                # escape as well %
+                title_without_slash = re.sub('%', '%%', title_without_slash)
+                search_term = re.sub(' ', '-', title_without_slash)
+                newlink='https://lista.mercadolivre.com.br/'+search_term+'_OrderId_PRICE_NoIndex_True'
+                self.urls.append(newlink)
 
     def start_requests(self):
-        search_term = re.sub(' ', '-', self.context)
-        urls = [
-            'https://lista.mercadolivre.com.br/'+search_term+'_OrderId_PRICE_NoIndex_True'
-        ]
-        for url in urls:
+        for url in self.urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
-    # with open('hayamax.json','r',encoding="utf-8") as f:
-    #     data=json.load(f)
-    #     for item in data:
-    #         search_term=re.sub(' ','-',item['title'])
-    #         start_requests(search_term)
-
-    # def start_requests(self):
-    #     print('start requests')
-    #     with open ('hayamax.json', 'r', encoding='utf-8') as f:
-    #         data= json.load(f)
-    #         for i in data:
-    #             search_term=re.sub(' ','-',i['title'])
-    #             search_term='https://lista.mercadolivre.com.br/'+search_term
-    #             yield scrapy.Request(url=search_term, callback=self.parse)
-
     def parse(self, res):
+
         # check if the list of products exists
         for i in res.xpath('//*[@id="root-app"]/div/div[2]/section/ol'):
             l = ItemLoader(item=MlItem(), selector=i)
