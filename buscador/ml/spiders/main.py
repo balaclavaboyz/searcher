@@ -25,28 +25,12 @@ class search_ml(scrapy.Spider):
 
     name = 'search_ml'
 
-    # def __init__(self, context=None, unit=None):
-    #     self.context = context
-    #     self.unit = unit
-    def __init__(self):
-        self.urls=[]
-        with open('hayamax.json','r',encoding='utf-8') as qwe:
-            tempdata=json.load(qwe)
-            for i in tempdata:
-                title_without_slash = re.sub('/', ' ', i['title'])
-                # # escape ""
-                # title_without_slash = re.sub('"', '', title_without_slash)
-                # t.write(title_without_slash+'\n')
-
-                # escape as well %
-                title_without_slash = re.sub('%', '%%', title_without_slash)
-                search_term = re.sub(' ', '-', title_without_slash)
-                newlink='https://lista.mercadolivre.com.br/'+search_term+'_OrderId_PRICE_NoIndex_True'
-                self.urls.append(newlink)
+    def __init__(self, context=None, unit=None):
+        self.context = context
 
     def start_requests(self):
         for url in self.urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield scrapy.Request(url='https://lista.mercadolivre.com.br/'+self.context+'_OrderId_PRICE_NoIndex_True', callback=self.parse)
 
     def parse(self, res):
 
