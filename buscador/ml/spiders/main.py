@@ -29,8 +29,7 @@ class search_ml(scrapy.Spider):
         self.context = context
 
     def start_requests(self):
-        for url in self.urls:
-            yield scrapy.Request(url='https://lista.mercadolivre.com.br/'+self.context+'_OrderId_PRICE_NoIndex_True', callback=self.parse)
+        yield scrapy.Request(url='https://lista.mercadolivre.com.br/'+self.context+'_OrderId_PRICE_NoIndex_True', callback=self.parse)
 
     def parse(self, res):
 
