@@ -140,8 +140,7 @@ class start(scrapy.Spider):
                     s['CONCURRENT_ITEMS']=5
 
                     process = CrawlerProcess(s)
-                    process.crawl(search_ml)
-                    # process.crawl(search_ml, context=item['title'], unit=item['unit'])
+                    process.crawl(search_ml, context=item['title'])
         process.start()
 
     def formula(self,original_price):
