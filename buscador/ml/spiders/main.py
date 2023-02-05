@@ -144,20 +144,21 @@ class start(scrapy.Spider):
                     # escape as well %
                     title_without_slash = re.sub('%', '%%', title_without_slash)
 
-                    process = CrawlerProcess({
-                        'COOKIES_ENABLED': 'False',
-                        'DOWNLOAD_DELAY':2,
-                        'CONCURRENT_REQUESTS' : 1,
-                        'RETRY_ENABLED' : 'True',
-                        'DOWNLOAD_FAIL_ON_DATALOSS' : 'false',
-                        'AUTOTHROTTLE_ENABLED' : 'True',
-                        'TELNETCONSOLE_ENABLED' : 'False',
-                        'USER_AGENT' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
-                        'FEED_FORMAT': 'csv',
-                        'FEED_URI': f"./output/{title_without_slash}.csv",
-                        'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
-                    })
-                    process.crawl(search_ml, context=item['title'], unit=item['unit'])
+                    s=get_project_settings() 
+                    s['FEED_FORMAT']= 'csv'
+                    s['FEED_URI']= f"./output/{title_without_slash}.csv"
+                    s['USER_AGENT']= 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
+                    s['AUTOTHROTTLE_ENABLED']=True
+                    s['DOWNLOAD_DELAY']=5
+                    s['COOKIES_ENABLED']=False
+                    s['CONCURRRENT_REQUESTS']=1
+                    s['LOG_ENABLED']=True
+                    s['HTTPCACHE_ENABLED']=True
+                    s['CONCURRENT_ITEMS']=5
+
+                    process = CrawlerProcess(s)
+                    process.crawl(search_ml)
+                    # process.crawl(search_ml, context=item['title'], unit=item['unit'])
         process.start()
 
     def formula(self,original_price):
