@@ -7,3 +7,4 @@ venv
 /buscador/ml/*.txt
 /buscador/ml/*.json
 /buscador/ml/*.csv
+/buscador/.scrapy
