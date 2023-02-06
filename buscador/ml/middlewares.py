@@ -10,6 +10,10 @@ from .settings import USERAGENTS
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
+class RotateUserAgentMiddleware:
+    def process_request(self,request,spider):
+        user_agent = random.choice(USERAGENTS)
+        request.headers['User-Agent']= user_agent
 
 class MlSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
