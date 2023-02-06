@@ -108,7 +108,6 @@ class start(scrapy.Spider):
     name = 'start'
 
     def __init__(self):
-        # search_ml()
         self.hayamax_search_in_ml()
         # self.filter_hayamax_products()
 
@@ -264,6 +263,7 @@ class start(scrapy.Spider):
                                         'link_ml': df_individual_hayamax_item['link'][0]
                                     }
                                     writer.writerow(context)
+                                    print(context)
 
                                 print('done')
                         else:
