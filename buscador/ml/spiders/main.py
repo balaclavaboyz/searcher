@@ -1,3 +1,4 @@
+from twisted.internet import reactor
 from scrapy.utils.project import get_project_settings
 import shutil
 import pandas
@@ -9,7 +10,7 @@ import os
 import json
 import scrapy
 from scrapy.http import FormRequest
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerProcess, CrawlerRunner
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -139,9 +140,9 @@ class start(scrapy.Spider):
                     s['CONCURRENT_ITEMS']=1
                     s['TELNETCONSOLE_ENABLED']=False
 
-                    process = CrawlerProcess(s)
-                    process.crawl(search_ml, context=item['title'])
-        process.start()
+                    runner= CrawlerRunner(s)
+                    runner.crawl(search_ml, context=item['title'])
+                reactor.run()
 
     def formula(self,original_price):
         margem = 0.00
