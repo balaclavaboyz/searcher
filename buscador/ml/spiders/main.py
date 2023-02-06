@@ -17,6 +17,45 @@ load_dotenv()
 cnpj=os.environ.get("cnpj")
 senha=os.environ.get("senha")
 
+class hayamax_json_to_ml_link_json(scrapy.Spider):
+    name='teste'
+
+    def __init__(self):
+        self.links=[]
+        with open('hayamax.json','r',encoding='utf-8') as f:
+            data=json.load(f)
+            for i in data:
+                newlink='https://lista.mercadolivre.com.br'+i['link']+'_OrderId_PRICE_NoIndex_True'
+                self.links.append(newlink)
+
+    def start_requests(self):
+        with open('hayamax_titles.txt','w',encoding='utf-8') as f:
+            for i in self.links:
+                f.write(i)
+                yield scrapy.Request(url=i, callback=self.parse)
+    def parse(self, res):
+        for i in res.xpath('//*[@id="root-app"]/div/div[2]/section/ol'):
+            l = ItemLoader(item=MlItem(), selector=i)
+
+            l.add_xpath(
+                'price', './/span[@class="price-tag-text-sr-only"]/text()')
+            l.add_xpath(
+                'title', '//*[@id="root-app"]/div/div[2]/section/ol/li[1]/div/div/div[2]/div[1]/a[1]/h2/text()')
+            l.add_xpath(
+                'link', '//*[@id="root-app"]/div/div[2]/section/ol/li[1]/div/div/div[2]/div[1]/a/@href')
+
+            # if xpath of title return none than
+            if i.xpath('.//h2[@class="ui-search-item__title ui-search-item__group__element shops__items-group-details shops__item-title"]/text()'):
+                l.add_xpath(
+                    'title', './/h2[@class="ui-search-item__title ui-search-item__group__element shops__items-group-details shops__item-title"]/text()')
+
+            # same thing
+            if i.xpath('.//h2[@class="ui-search-item__title ui-search-item__group__element shops__items-group-details shops__item-title"]/text()'):
+                l.add_xpath(
+                    'link', './/div[@class="andes-card andes-card--flat andes-card--default ui-search-result shops__cardStyles ui-search-result--core andes-card--padding-default andes-card--animated"]/a/@href')
+
+            yield l.load_item()
+
 class search_ml(scrapy.Spider):
     # custom_settings={
     #     'AUTOTHROTTLE_ENABLED': True,
