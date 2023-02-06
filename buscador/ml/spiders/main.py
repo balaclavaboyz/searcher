@@ -125,24 +125,24 @@ class HayamaxSpider(scrapy.Spider):
     def parsedata(self, res):
         for i in res.xpath('//*[@class="search-product"]'):
             l = ItemLoader(item=MlItem(), selector=i)
-            if i.xpath('.//*[@class="search-product-price spp-color-hayamax"]/span/text()') == ' ':
+            price_xpath=i.xpath('.//*[@class="search-product-price spp-color-hayamax"]/span/text()').extract_first()
+            if price_xpath==None or price_xpath== '\xa0':
                 print('price achou nada')
-                l.add_xpath('price', '0')
             else:
                 print('price achou algo')
-                print(i.xpath('.//*[@class="search-product-price spp-color-hayamax"]/span/text()'))
+                # print(i.xpath('.//*[@class="search-product-price spp-color-hayamax"]/span/text()'))
                 l.add_xpath(
                     'price', './/*[@class="search-product-price spp-color-hayamax"]/span/text()')
-            # item['price']= i.xpath(
-            #     './/*[@class="search-product-price spp-color-hayamax"]/span/text()').get()
-            l.add_xpath('title', './/*[@class="search-product-title"]/text()')
-            l.add_xpath('link', './/div[@class="col-12 mx-auto"]/a/@href')
-            # item['title']=i.xpath('.//*[@class="search-product-title"]/text()').get()
-            # item['link']='https://loja.hayamax.com.br/'+i.xpath('.//div[@class="col-12 mx-auto"]/a/@href').get()
-            l.add_xpath(
-                'unit', './/*[@class="row search-product-divall"]/div/p[2]/text()')
+                # item['price']= i.xpath(
+                #     './/*[@class="search-product-price spp-color-hayamax"]/span/text()').get()
+                l.add_xpath('title', './/*[@class="search-product-title"]/text()')
+                l.add_xpath('link', './/div[@class="col-12 mx-auto"]/a/@href')
+                # item['title']=i.xpath('.//*[@class="search-product-title"]/text()').get()
+                # item['link']='https://loja.hayamax.com.br/'+i.xpath('.//div[@class="col-12 mx-auto"]/a/@href').get()
+                l.add_xpath(
+                    'unit', './/*[@class="row search-product-divall"]/div/p[2]/text()')
 
-            yield l.load_item()
+                yield l.load_item()
 
 class start(scrapy.Spider):
     name = 'start'
@@ -181,7 +181,7 @@ class start(scrapy.Spider):
 
                     runner= CrawlerRunner(s)
                     runner.crawl(search_ml, context=item['title'])
-                reactor.run()
+                    reactor.run()
 
     def formula(self,original_price):
         margem = 0.00
