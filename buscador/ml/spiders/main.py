@@ -150,7 +150,7 @@ class hayamax_json_to_ml_link_json(scrapy.Spider):
             l.add_value('price_ml',current_product[0]['price'])
             l.add_value('price_hayamax', res.meta.get('theprice'))
             l.add_value('link_ml',current_product[0]['link'])
-            l.add_value('link_hayamax', 'https://loja.hayamax.com.br/'+res.meta.get('hayamax_link'))
+            l.add_value('link_hayamax', 'https://loja.hayamax.com.br'+res.meta.get('hayamax_link'))
             l.add_value('margin', margin)
             # l.add_xpath(
             #     'price', './/span[@class="price-tag-text-sr-only"]/text()')
