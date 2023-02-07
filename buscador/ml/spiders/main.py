@@ -33,6 +33,7 @@ class hayamax_json_to_ml_link_json(scrapy.Spider):
                 info_product.append({
                     'newlink':newlink,
                     'price':i['price_hayamax'],
+                    'hayamax_link':i['link_hayamax']
                 })
                 self.single_product.append(info_product)
                 # self.links.append(newlink)
@@ -66,7 +67,7 @@ class hayamax_json_to_ml_link_json(scrapy.Spider):
                     # f.write(i)
                     # print(i['newlink'])
                     # print(i['price'])
-                    yield scrapy.Request(url=j['newlink'], callback=self.parse,meta={'theprice':j['price'], 'thelink':j['newlink']})
+                    yield scrapy.Request(url=j['newlink'], callback=self.parse,meta={'theprice':j['price'], 'thelink':j['newlink'], 'hayamax_link':j['hayamax_link']})
 
     def parse(self, res):
         final = []
@@ -149,7 +150,7 @@ class hayamax_json_to_ml_link_json(scrapy.Spider):
             l.add_value('price_ml',current_product[0]['price'])
             l.add_value('price_hayamax', res.meta.get('theprice'))
             l.add_value('link_ml',current_product[0]['link'])
-            l.add_value('link_hayamax', res.meta.get('thelink'))
+            l.add_value('link_hayamax', 'https://loja.hayamax.com.br/'+res.meta.get('hayamax_link'))
             l.add_value('margin', margin)
             # l.add_xpath(
             #     'price', './/span[@class="price-tag-text-sr-only"]/text()')
